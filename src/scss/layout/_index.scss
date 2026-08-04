@@ -1,2 +1,14 @@
-// Layout styles will be added from Day 3 onward.
+.l-container {
+  width: min(100% - (var(--content-padding) * 2), var(--content-width));
+  margin-inline: auto;
+}
 
+.l-section {
+  padding-block: var(--space-7);
+}
+
+@media (width >= 48rem) {
+  .l-section {
+    padding-block: var(--space-8);
+  }
+}

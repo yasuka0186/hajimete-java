@@ -6,10 +6,122 @@
     <title>はじめてJava</title>
   </head>
   <body>
+    <header class="p-site-header">
+      <div class="p-site-header__inner l-container">
+        <a class="p-site-header__logo" href="./" aria-label="はじめてJava トップページ">
+          <span class="p-site-header__mark" aria-hidden="true">J</span>
+          はじめてJava
+        </a>
+        <nav class="p-site-header__nav" aria-label="メインナビゲーション">
+          <a class="p-site-header__nav-link" href="#problems">初心者の悩み</a>
+          <a class="p-site-header__nav-link" href="#solution">学び方</a>
+        </nav>
+        <a class="c-button c-button--primary p-site-header__cta" href="./trial/">無料体験へ</a>
+      </div>
+    </header>
     <main>
-      <h1>はじめてJava</h1>
-      <p>ランディングページはDay 2以降に制作します。</p>
+      <section class="p-hero">
+        <div class="p-hero__inner l-container">
+          <div class="p-hero__content">
+            <p class="p-hero__eyebrow"><span aria-hidden="true">●</span> プログラミング完全初心者向け</p>
+            <h1 class="p-hero__title">はじめてでも迷わない。<br><span>Javaを順番どおりに。</span></h1>
+            <p class="p-hero__lead">6段階のロードマップで、プログラミングの基本からオブジェクト指向まで学べます。環境構築は不要。まずはブラウザで文字出力を体験してみましょう。</p>
+            <div class="p-hero__actions">
+              <a class="c-button c-button--primary p-hero__cta" href="./trial/">無料でJavaを体験する</a>
+              <p class="p-hero__cta-note">登録不要・環境構築不要</p>
+            </div>
+            <ul class="p-hero__benefits">
+              <li><span aria-hidden="true">✓</span> ブラウザで体験</li>
+              <li><span aria-hidden="true">✓</span> 全3問・5〜10分</li>
+              <li><span aria-hidden="true">✓</span> やさしい解説</li>
+            </ul>
+          </div>
+
+          <figure class="p-hero__visual">
+            <figcaption class="u-visually-hidden">無料体験画面のイメージ</figcaption>
+            <div class="p-trial-mock">
+              <div class="p-trial-mock__bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <p>無料体験：文字を表示してみよう</p>
+              </div>
+              <div class="p-trial-mock__progress">
+                <span>問題 1 / 3</span>
+                <span class="p-trial-mock__progress-track" aria-hidden="true"><span></span></span>
+              </div>
+              <div class="p-trial-mock__body">
+                <div class="p-trial-mock__question">
+                  <p class="p-trial-mock__label">QUESTION 1</p>
+                  <h2>空欄を埋めて、文字を表示しよう</h2>
+                  <p>文字を表示する命令を入力します。</p>
+                  <div class="p-trial-mock__tip"><span aria-hidden="true">!</span> 学習ポイント<br><strong>println</strong>は、文字を表示して改行する命令です。</div>
+                </div>
+                <div class="p-trial-mock__editor">
+                  <p>コード入力</p>
+                  <code>System.out.<mark>println</mark>(<span>"Hello, Java!"</span>);</code>
+                  <span class="p-trial-mock__button">答えを確認する</span>
+                  <div class="p-trial-mock__result"><strong><span aria-hidden="true">✓</span> 正解！</strong><br>想定出力：Hello, Java!</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-hero__decoration p-hero__decoration--dots" aria-hidden="true"></div>
+            <div class="p-hero__decoration p-hero__decoration--spark" aria-hidden="true">✦</div>
+            <p class="p-hero__mock-note">※ Javaコードは実行せず、入力内容をJavaScriptで判定する体験版です。</p>
+          </figure>
+        </div>
+      </section>
+
+      <section id="problems" class="p-problems l-section" aria-labelledby="problems-title">
+        <div class="l-container">
+          <div class="c-section-heading p-problems__heading">
+            <p class="c-section-heading__eyebrow">こんな悩みはありませんか？</p>
+            <h2 id="problems-title" class="c-section-heading__title">Javaを始めたい。でも、何から学べばいいか分からない。</h2>
+          </div>
+          <div class="p-problems__grid">
+            <article class="c-card p-problem-card">
+              <span class="p-problem-card__number" aria-hidden="true">01</span>
+              <div class="p-problem-card__icon" aria-hidden="true">?</div>
+              <h3 class="c-card__title">学ぶ順番が分からない</h3>
+              <p class="c-card__text">教材は多いけれど、最初に何を選び、次に何を学べばよいか迷ってしまう。</p>
+            </article>
+            <article class="c-card p-problem-card">
+              <span class="p-problem-card__number" aria-hidden="true">02</span>
+              <div class="p-problem-card__icon" aria-hidden="true">⌘</div>
+              <h3 class="c-card__title">環境構築で止まってしまう</h3>
+              <p class="c-card__text">コードを書く前の設定が難しく、学習を始めるところまでたどり着けない。</p>
+            </article>
+            <article class="c-card p-problem-card">
+              <span class="p-problem-card__number" aria-hidden="true">03</span>
+              <div class="p-problem-card__icon" aria-hidden="true">Aa</div>
+              <h3 class="c-card__title">説明についていけるか不安</h3>
+              <p class="c-card__text">初めて見る専門用語が多く、自分にも理解できるか心配になる。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="solution" class="p-solution l-section" aria-labelledby="solution-title">
+        <div class="p-solution__inner l-container">
+          <div class="p-solution__content">
+            <p class="c-section-heading__eyebrow">迷わない学び方</p>
+            <h2 id="solution-title">「はじめてJava」なら、<br>決められた順番に進むだけ。</h2>
+            <p>6段階のロードマップに沿って、基礎から一つずつ進みます。最初の体験はブラウザだけで始められ、1回5〜10分を目安に取り組めます。</p>
+          </div>
+          <ul class="p-solution__list">
+            <li><span aria-hidden="true">01</span><strong>6段階のロードマップ</strong><small>次に学ぶ内容がひと目で分かる</small></li>
+            <li><span aria-hidden="true">02</span><strong>ブラウザだけで始められる</strong><small>無料体験は環境構築なし</small></li>
+            <li><span aria-hidden="true">03</span><strong>図解とやさしい言葉</strong><small>専門用語には短い説明を添える</small></li>
+            <li><span aria-hidden="true">04</span><strong>1レッスン5〜10分</strong><small>短い時間で一つずつ進める</small></li>
+          </ul>
+        </div>
+      </section>
     </main>
+    <footer class="p-site-footer">
+      <div class="p-site-footer__inner l-container">
+        <p class="p-site-footer__name">はじめてJava</p>
+        <p class="p-site-footer__note">本サイトはポートフォリオ用に制作した架空サービスのデモです。</p>
+        <p class="p-site-footer__copyright"><small>&copy; 2026 はじめてJava</small></p>
+      </div>
+    </footer>
     <script type="module" src="./src/js/main.js"></script>
   </body>
 </html>
