@@ -9,7 +9,7 @@
 - 技術: HTML5、SCSS、JavaScript（ES Modules）、Vite、Vitest、Playwright、ESLint、Stylelint、HTML Validate
 - GitHub Pages: Viteの`base`を`./`とし、プロジェクトサイト配下でもアセット参照が解決される相対パス方針とする
 
-Day 2の情報設計は[`docs/day-2-information-architecture.md`](docs/day-2-information-architecture.md)、Day 3のデザイントークンと共通部品方針は[`docs/day-3-design-foundation.md`](docs/day-3-design-foundation.md)にまとめています。Day 4までにLPのヘッダー、ファーストビュー、悩み、解決策を実装しました。LP後半と無料体験機能は制作スケジュールに従って追加します。
+Day 2の情報設計は[`docs/day-2-information-architecture.md`](docs/day-2-information-architecture.md)、Day 3のデザイントークンと共通部品方針は[`docs/day-3-design-foundation.md`](docs/day-3-design-foundation.md)にまとめています。Day 5までにLPの全セクションを実装しました。詳細なレスポンシブ調整と無料体験機能は制作スケジュールに従って追加します。
 
 ## セットアップ
 
