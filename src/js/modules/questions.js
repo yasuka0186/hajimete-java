@@ -10,6 +10,7 @@ export const QUESTIONS = [
     codeSuffix: '("Hello, Java!");',
     expectedAnswer: 'println',
     expectedOutput: 'Hello, Java!',
+    explanation: 'printlnは、丸かっこの中に書いた文字を表示し、そのあとで改行する命令です。すべて小文字で書きます。',
   },
   {
     id: 'question-2',
@@ -20,6 +21,7 @@ export const QUESTIONS = [
     inputType: 'line',
     expectedAnswer: 'System.out.println("Hello, Java!");',
     expectedOutput: 'Hello, Java!',
+    explanation: 'System.out.printlnの丸かっこに文字列を入れ、命令の終わりにセミコロンを付けると、1行の文字出力になります。',
   },
   {
     id: 'question-3',
@@ -30,8 +32,8 @@ export const QUESTIONS = [
     inputType: 'line',
     expectedAnswer: 'System.out.println("Javaをはじめよう");',
     expectedOutput: 'Javaをはじめよう',
+    explanation: 'ダブルクォーテーションの内側を書き換えると、同じ命令で表示する文字を変えられます。',
   },
 ];
 
 export const getQuestionById = (questionId) => QUESTIONS.find(({ id }) => id === questionId);
-

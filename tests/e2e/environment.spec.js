@@ -102,3 +102,54 @@ test('uses two columns on desktop and one column on mobile for the trial', async
   const mobilePracticeBox = await practice.boundingBox();
   expect(mobilePracticeBox.y).toBeGreaterThan(mobileLessonBox.y);
 });
+
+test('shows a specific hint for an incorrect trial answer', async ({ page }) => {
+  await page.goto('./trial/');
+
+  await page.getByLabel('空欄に入る命令').fill('print');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+
+  const feedback = page.locator('[data-feedback]');
+  await expect(feedback).toBeFocused();
+  await expect(feedback.getByRole('heading', { name: 'もう一度確認してみよう' })).toBeVisible();
+  await expect(feedback.getByText(/println.*小文字/)).toBeVisible();
+  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('print');
+});
+
+test('shows feedback without auto-advancing and advances only with the next button', async ({ page }) => {
+  await page.goto('./trial/');
+
+  await page.getByLabel('空欄に入る命令').fill('println');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+
+  const feedback = page.locator('[data-feedback]');
+  await expect(feedback.getByRole('heading', { name: '正解！' })).toBeVisible();
+  await expect(feedback.getByText(/printlnは/)).toBeVisible();
+  await expect(feedback.getByText('Hello, Java!', { exact: true })).toBeVisible();
+  await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+  await expect(page.getByText('問題 2 / 3', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Javaコードを1行で入力')).toBeFocused();
+});
+
+test('submits all three answer formats with the keyboard shortcut', async ({ page }) => {
+  await page.goto('./trial/');
+
+  await page.getByLabel('空欄に入る命令').fill('  println  ');
+  await page.keyboard.press('Control+Enter');
+  await expect(page.getByRole('heading', { name: '正解！' })).toBeVisible();
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+
+  await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Hello, Java!");');
+  await page.keyboard.press('Meta+Enter');
+  await expect(page.getByRole('heading', { name: '正解！' })).toBeVisible();
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+
+  await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Javaをはじめよう");');
+  await page.keyboard.press('Control+Enter');
+  await expect(page.getByRole('heading', { name: '正解！' })).toBeVisible();
+  await expect(page.getByText('Javaをはじめよう', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '次の問題へ' })).toBeHidden();
+  await expect(page.getByText('問題 3 / 3', { exact: true })).toBeVisible();
+});

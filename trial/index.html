@@ -47,10 +47,6 @@
               <p id="learning-point-title"><span aria-hidden="true">!</span> 学習ポイント</p>
               <p data-learning-point>printlnは、文字を表示したあとに改行する命令です。小文字で入力します。</p>
             </aside>
-            <aside class="p-trial-hint" aria-labelledby="hint-title" hidden data-hint>
-              <h3 id="hint-title">ヒント</h3>
-              <p data-hint-text></p>
-            </aside>
           </div>
 
           <div class="p-trial-workspace__practice">
@@ -75,13 +71,16 @@
               </div>
 
               <p class="p-code-form__shortcut">Ctrl／Command＋Enterでも判定できます。</p>
-              <button class="c-button c-button--primary p-code-form__submit" type="submit" disabled>答えを確認する</button>
-              <p class="p-code-form__pending">回答判定は現在準備中です。</p>
+              <button class="c-button c-button--primary p-code-form__submit" type="submit">答えを確認する</button>
             </form>
 
             <section class="p-trial-feedback" aria-labelledby="result-title" aria-live="polite" tabindex="-1" hidden data-feedback>
               <h2 id="result-title" data-result-title>判定結果</h2>
               <p data-result-message></p>
+              <aside class="p-trial-hint" aria-labelledby="hint-title" hidden data-hint>
+                <h3 id="hint-title">ヒント</h3>
+                <p data-hint-text></p>
+              </aside>
               <div hidden data-explanation>
                 <h3>解説</h3>
                 <p data-explanation-text></p>
