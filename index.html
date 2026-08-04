@@ -12,18 +12,23 @@
           <span class="p-site-header__mark" aria-hidden="true">J</span>
           はじめてJava
         </a>
-        <nav class="p-site-header__nav" aria-label="メインナビゲーション">
+        <button class="p-site-header__menu-button" type="button" aria-expanded="false" aria-controls="main-navigation" data-nav-toggle>
+          <span class="p-site-header__menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>メニュー</span>
+        </button>
+        <nav id="main-navigation" class="p-site-header__nav" aria-label="メインナビゲーション" data-navigation>
           <a class="p-site-header__nav-link" href="#features">特徴</a>
           <a class="p-site-header__nav-link" href="#roadmap">ロードマップ</a>
           <a class="p-site-header__nav-link" href="#trial">体験</a>
           <a class="p-site-header__nav-link" href="#pricing">料金</a>
           <a class="p-site-header__nav-link" href="#faq">FAQ</a>
+          <a class="c-button c-button--primary p-site-header__nav-cta" href="./trial/">無料でJavaを体験する</a>
         </nav>
         <a class="c-button c-button--primary p-site-header__cta" href="./trial/">無料体験へ</a>
       </div>
     </header>
     <main>
-      <section class="p-hero">
+      <section class="p-hero" data-reveal>
         <div class="p-hero__inner l-container">
           <div class="p-hero__content">
             <p class="p-hero__eyebrow"><span aria-hidden="true">●</span> プログラミング完全初心者向け</p>
@@ -73,7 +78,7 @@
         </div>
       </section>
 
-      <section id="problems" class="p-problems l-section" aria-labelledby="problems-title">
+      <section id="problems" class="p-problems l-section" aria-labelledby="problems-title" data-reveal>
         <div class="l-container">
           <div class="c-section-heading p-problems__heading">
             <p class="c-section-heading__eyebrow">こんな悩みはありませんか？</p>
@@ -102,7 +107,7 @@
         </div>
       </section>
 
-      <section id="solution" class="p-solution l-section" aria-labelledby="solution-title">
+      <section id="solution" class="p-solution l-section" aria-labelledby="solution-title" data-reveal>
         <div class="p-solution__inner l-container">
           <div class="p-solution__content">
             <p class="c-section-heading__eyebrow">迷わない学び方</p>
@@ -118,7 +123,7 @@
         </div>
       </section>
 
-      <section id="features" class="p-features l-section" aria-labelledby="features-title">
+      <section id="features" class="p-features l-section" aria-labelledby="features-title" data-reveal>
         <div class="l-container">
           <div class="c-section-heading p-section-heading--center">
             <p class="c-section-heading__eyebrow">3つの特徴</p>
@@ -148,7 +153,7 @@
         </div>
       </section>
 
-      <section id="roadmap" class="p-roadmap l-section" aria-labelledby="roadmap-title">
+      <section id="roadmap" class="p-roadmap l-section" aria-labelledby="roadmap-title" data-reveal>
         <div class="l-container">
           <div class="p-roadmap__intro">
             <div class="c-section-heading">
@@ -187,7 +192,7 @@
         </div>
       </section>
 
-      <section id="trial" class="p-trial-intro l-section" aria-labelledby="trial-title">
+      <section id="trial" class="p-trial-intro l-section" aria-labelledby="trial-title" data-reveal>
         <div class="p-trial-intro__inner l-container">
           <div class="p-trial-intro__visual" aria-hidden="true">
             <div class="p-code-window">
@@ -213,7 +218,7 @@
         </div>
       </section>
 
-      <section id="pricing" class="p-pricing l-section" aria-labelledby="pricing-title">
+      <section id="pricing" class="p-pricing l-section" aria-labelledby="pricing-title" data-reveal>
         <div class="l-container">
           <div class="c-section-heading p-section-heading--center">
             <p class="c-section-heading__eyebrow">料金プラン</p>
@@ -249,7 +254,7 @@
         </div>
       </section>
 
-      <section id="faq" class="p-faq l-section" aria-labelledby="faq-title">
+      <section id="faq" class="p-faq l-section" aria-labelledby="faq-title" data-reveal>
         <div class="p-faq__inner l-container">
           <div class="c-section-heading">
             <p class="c-section-heading__eyebrow">よくある質問</p>
@@ -267,7 +272,7 @@
         </div>
       </section>
 
-      <section class="p-final-cta l-section" aria-labelledby="final-cta-title">
+      <section class="p-final-cta l-section" aria-labelledby="final-cta-title" data-reveal>
         <div class="p-final-cta__inner l-container">
           <div>
             <p class="c-section-heading__eyebrow">登録不要・環境構築不要</p>

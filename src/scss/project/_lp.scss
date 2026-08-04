@@ -404,6 +404,55 @@
   }
 }
 
+@media (width >= 48rem) and (width < 64rem) {
+  .p-hero__content {
+    max-width: 44rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .p-hero__lead,
+  .p-hero__visual {
+    margin-inline: auto;
+  }
+
+  .p-hero__actions,
+  .p-hero__benefits {
+    justify-content: center;
+  }
+}
+
+@media (width < 30rem) {
+  .p-hero__title {
+    font-size: clamp(2rem, 10.2vw, 2.75rem);
+  }
+
+  .p-hero__lead {
+    font-size: var(--font-size-base);
+  }
+
+  .p-hero__cta,
+  .p-final-cta__button {
+    width: 100%;
+  }
+
+  .p-roadmap__item {
+    grid-template-columns: 3.25rem 1fr;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .p-feature-card,
+  .p-price-card {
+    padding: var(--space-5);
+  }
+
+  .p-faq summary,
+  .p-faq details > div {
+    padding-inline: var(--space-3);
+  }
+}
+
 @media (width >= 64rem) {
   .p-hero__inner {
     grid-template-columns: minmax(0, 0.95fr) minmax(30rem, 1.05fr);

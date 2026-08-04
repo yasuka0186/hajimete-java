@@ -16,6 +16,7 @@ body {
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   text-rendering: optimizelegibility;
+  overflow-wrap: anywhere;
 }
 
 h1,
@@ -63,6 +64,23 @@ a {
   background: var(--color-accent);
 }
 
+[id] {
+  scroll-margin-block-start: 1rem;
+}
+
+.js-reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 600ms ease,
+    transform 600ms ease;
+}
+
+.js-reveal-ready [data-reveal].js-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -73,5 +91,10 @@ a {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .js-reveal-ready [data-reveal] {
+    opacity: 1;
+    transform: none;
   }
 }
