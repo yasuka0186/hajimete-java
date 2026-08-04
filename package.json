@@ -1,0 +1,26 @@
+{
+  "name": "hajimete-java",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "lint:styles": "stylelint \"src/scss/**/*.scss\"",
+    "validate:html": "html-validate index.html trial/index.html"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
+    "eslint": "^10.8.0",
+    "html-validate": "^10.17.0",
+    "sass": "^1.102.0",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.10"
+  }
+}
