@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>無料体験 | はじめてJava</title>
   </head>
-  <body>
+  <body class="p-trial-page">
     <header class="p-site-header">
       <div class="p-site-header__inner l-container">
         <a class="p-site-header__logo" href="../" aria-label="はじめてJava トップページ">
@@ -15,22 +15,92 @@
         <a class="c-button c-button--secondary" href="../">LPへ戻る</a>
       </div>
     </header>
-    <main class="p-foundation-preview l-section">
+
+    <main class="p-trial-page__main">
       <div class="l-container">
-        <div class="c-section-heading">
-          <p class="c-section-heading__eyebrow">FREE TRIAL</p>
-          <h1 class="c-section-heading__title">無料体験：文字を表示してみよう</h1>
-          <p class="c-section-heading__text">問題画面と学習機能はDay 7以降に制作します。</p>
-        </div>
-        <article class="c-card p-foundation-preview__card">
-          <h2 class="c-card__title">全3問の短いレッスン</h2>
-          <p class="c-card__text">コードの一部、1行全体、表示内容の変更という順番で学ぶ予定です。</p>
-        </article>
+        <header class="p-trial-heading">
+          <div>
+            <p class="c-section-heading__eyebrow">FREE TRIAL</p>
+            <h1>無料体験：文字を表示してみよう</h1>
+            <p>全3問を通して、Javaで文字を表示する基本を学びます。</p>
+          </div>
+          <p class="p-trial-heading__notice"><span aria-hidden="true">i</span> Javaコードは実行せず、入力内容をブラウザ内で判定する体験版です。</p>
+        </header>
+
+        <section class="p-trial-progress" aria-labelledby="progress-title">
+          <div class="p-trial-progress__summary">
+            <h2 id="progress-title">レッスンの進み具合</h2>
+            <p data-question-count>問題 1 / 3</p>
+          </div>
+          <progress class="p-trial-progress__track" max="3" value="0" aria-label="完了した問題数" data-progressbar>0 / 3</progress>
+          <nav aria-label="問題の進捗">
+            <ol class="p-trial-progress__list" data-progress-navigation></ol>
+          </nav>
+        </section>
+
+        <section class="p-trial-workspace" aria-labelledby="question-title">
+          <div class="p-trial-workspace__lesson">
+            <p class="p-trial-workspace__step" data-question-step>QUESTION 1</p>
+            <h2 id="question-title" data-question-title>空欄を埋めて、文字を表示しよう</h2>
+            <p class="p-trial-workspace__prompt" data-question-prompt>「Hello, Java!」と表示するために、空欄へ文字を表示する命令を入力してください。</p>
+            <aside class="p-learning-point" aria-labelledby="learning-point-title">
+              <p id="learning-point-title"><span aria-hidden="true">!</span> 学習ポイント</p>
+              <p data-learning-point>printlnは、文字を表示したあとに改行する命令です。小文字で入力します。</p>
+            </aside>
+            <aside class="p-trial-hint" aria-labelledby="hint-title" hidden data-hint>
+              <h3 id="hint-title">ヒント</h3>
+              <p data-hint-text></p>
+            </aside>
+          </div>
+
+          <div class="p-trial-workspace__practice">
+            <form class="p-code-form" data-answer-form>
+              <div class="p-code-form__heading">
+                <h2>コード入力</h2>
+                <p>入力内容は外部へ送信しません。</p>
+              </div>
+
+              <div class="p-code-form__fragment" data-fragment-field>
+                <label for="fragment-answer">空欄に入る命令</label>
+                <div class="p-code-form__code-line">
+                  <code data-code-prefix></code>
+                  <input id="fragment-answer" name="answer-fragment" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-fragment-input>
+                  <code data-code-suffix></code>
+                </div>
+              </div>
+
+              <div class="p-code-form__line" hidden data-line-field>
+                <label for="line-answer">Javaコードを1行で入力</label>
+                <textarea id="line-answer" name="answer-line" rows="4" autocomplete="off" autocapitalize="off" spellcheck="false" data-line-input></textarea>
+              </div>
+
+              <p class="p-code-form__shortcut">Ctrl／Command＋Enterでも判定できます。</p>
+              <button class="c-button c-button--primary p-code-form__submit" type="submit" disabled>答えを確認する</button>
+              <p class="p-code-form__pending">回答判定は現在準備中です。</p>
+            </form>
+
+            <section class="p-trial-feedback" aria-labelledby="result-title" aria-live="polite" tabindex="-1" hidden data-feedback>
+              <h2 id="result-title" data-result-title>判定結果</h2>
+              <p data-result-message></p>
+              <div hidden data-explanation>
+                <h3>解説</h3>
+                <p data-explanation-text></p>
+              </div>
+              <div hidden data-console>
+                <h3>想定出力</h3>
+                <pre><code data-console-output></code></pre>
+              </div>
+              <button class="c-button c-button--primary" type="button" hidden data-next-question>次の問題へ</button>
+            </section>
+          </div>
+        </section>
       </div>
     </main>
+
     <footer class="p-site-footer">
       <div class="p-site-footer__inner l-container">
         <p class="p-site-footer__name">はじめてJava</p>
+        <a href="../">LPへ戻る</a>
         <p class="p-site-footer__note">本サイトはポートフォリオ用に制作した架空サービスのデモです。</p>
         <p class="p-site-footer__copyright"><small>&copy; 2026 はじめてJava</small></p>
       </div>
