@@ -19,19 +19,19 @@
 
 | 項目 | 結果 | 備考 |
 | --- | --- | --- |
-| GitHub Pagesの公開 | 確認前 | Actions完了後に更新 |
-| LPと無料体験の表示 | 確認前 | 公開URLで確認 |
-| 内部リンクとアセット | 確認前 | CTA、LP復帰、CSS、JS、OGPを確認 |
-| 全3問の完了 | 確認前 | 公開URLに対するPlaywrightで確認 |
-| コンソールエラー | 確認前 | 主要導線で確認 |
-| Lighthouseモバイル | 確認前 | 4カテゴリを公開URLで計測 |
+| GitHub Pagesの公開 | 成功 | GitHub Actions run `30999483469` |
+| LPと無料体験の表示 | 成功 | 両URLがHTTP 200 |
+| 内部リンクとアセット | 成功 | CTA、LP復帰、CSS、JS、OGP、robots、sitemapを確認 |
+| 全3問の完了 | 成功 | 公開URLのPlaywrightで確認 |
+| コンソールエラー | 成功 | 全3問完了シナリオで0件 |
+| Lighthouseモバイル | 成功 | LP 98／100／100／100、無料体験 100／100／100／100 |
 
 ## 自動・ローカル確認
 
 | 項目 | 結果 | 備考 |
 | --- | --- | --- |
 | Vitest必須テスト | 成功 | 36件、Statements 98.8% |
-| Playwright必須シナリオ | 成功 | Chromium 24件 |
+| Playwright必須シナリオ | 成功 | Chromium 25件（コンソール検査を含む） |
 | ESLint | 成功 | エラー0件 |
 | Stylelint | 成功 | エラー0件 |
 | HTML Validator | 成功 | エラー0件 |
@@ -43,7 +43,7 @@
 
 | 対象 | 結果 | 備考 |
 | --- | --- | --- |
-| Google Chrome最新版 | ローカル確認済み | Chrome 150で主要導線を自動確認。公開環境は公開後に確認 |
+| Google Chrome最新版 | 確認済み | Chrome 150でローカル・公開環境の主要導線を自動確認 |
 | Safari最新版 | 未確認 | WebKit互換確認とは区別する |
 | Microsoft Edge最新版 | 未確認 | Chromium互換確認とは区別する |
 | Firefox最新版 | 未確認 | Playwright Firefox確認とは区別する |
