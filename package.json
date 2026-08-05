@@ -9,11 +9,14 @@
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:a11y": "playwright test --config=playwright.a11y.config.js",
+    "test:browsers": "playwright test --config=playwright.browsers.config.js",
     "lint": "eslint .",
     "lint:styles": "stylelint \"src/scss/**/*.scss\"",
     "validate:html": "html-validate index.html trial/index.html"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@vitest/coverage-v8": "^4.1.10",

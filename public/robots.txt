@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yasuka0186.github.io/hajimete-java/sitemap.xml
