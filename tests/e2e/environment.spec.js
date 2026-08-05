@@ -33,6 +33,20 @@ test('serves both entry pages', async ({ page }) => {
   await expect(page).toHaveURL(/\/$/);
 });
 
+test('completes the published flow without console errors', async ({ page }) => {
+  const errors = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  page.on('pageerror', (error) => errors.push(error.message));
+
+  await page.goto('./trial/');
+  await completeTrial(page);
+
+  await expect(page.getByRole('heading', { name: '全3問、完了しました！' })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test('shows the paid plan as unavailable', async ({ page }) => {
   await page.goto('./');
 
