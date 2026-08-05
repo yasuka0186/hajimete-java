@@ -1,5 +1,17 @@
 import { expect, test } from '@playwright/test';
 
+const completeTrial = async (page) => {
+  await page.getByLabel('空欄に入る命令').fill('println');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+  await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Hello, Java!");');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+  await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Javaをはじめよう");');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await page.getByRole('button', { name: '結果を見る' }).click();
+};
+
 test('serves both entry pages', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('heading', { name: /はじめてでも迷わない/ })).toBeVisible();
@@ -150,6 +162,80 @@ test('submits all three answer formats with the keyboard shortcut', async ({ pag
   await page.keyboard.press('Control+Enter');
   await expect(page.getByRole('heading', { name: '正解！' })).toBeVisible();
   await expect(page.getByText('Javaをはじめよう', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: '次の問題へ' })).toBeHidden();
+  await expect(page.getByRole('button', { name: '結果を見る' })).toBeVisible();
   await expect(page.getByText('問題 3 / 3', { exact: true })).toBeVisible();
+});
+
+test('restores an unfinished answer and resumes the unfinished problem after reload', async ({ page }) => {
+  await page.goto('./trial/');
+
+  await page.getByLabel('空欄に入る命令').fill('prin');
+  await page.waitForTimeout(300);
+  await page.reload();
+  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('prin');
+
+  await page.getByLabel('空欄に入る命令').fill('println');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await page.getByRole('button', { name: '次の問題へ' }).click();
+  await page.getByLabel('Javaコードを1行で入力').fill('System.out.println(');
+  await page.waitForTimeout(300);
+  await page.reload();
+
+  await expect(page.getByText('問題 2 / 3', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('Javaコードを1行で入力')).toHaveValue('System.out.println(');
+});
+
+test('shows the completion screen and restores it after reload', async ({ page }) => {
+  await page.goto('./trial/');
+  await completeTrial(page);
+
+  await expect(page.getByRole('heading', { name: '全3問、完了しました！' })).toBeVisible();
+  await expect(page.getByText('3 / 3', { exact: true })).toBeVisible();
+  await expect(page.getByText(/System\.out\.printlnで文字を表示できる/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: '第2章：変数とデータ型' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '準備中' })).toBeDisabled();
+
+  await page.reload();
+  await expect(page.getByRole('heading', { name: '全3問、完了しました！' })).toBeVisible();
+});
+
+test('opens a completed problem read-only and enables editing only after retry', async ({ page }) => {
+  await page.goto('./trial/');
+  await completeTrial(page);
+
+  const progress = page.getByRole('navigation', { name: '問題の進捗' });
+  await progress.locator('[data-question-id="question-1"]').click();
+
+  const answer = page.getByLabel('空欄に入る命令');
+  await expect(answer).toHaveAttribute('readonly', '');
+  await expect(answer).toHaveValue('println');
+  await expect(page.getByRole('heading', { name: '完了した問題' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '答えを確認する' })).toBeHidden();
+
+  await page.getByRole('button', { name: '再挑戦' }).click();
+  await expect(answer).not.toHaveAttribute('readonly');
+  await expect(page.getByRole('button', { name: '答えを確認する' })).toBeVisible();
+  await answer.fill('println');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await page.getByRole('button', { name: '学習に戻る' }).click();
+  await expect(page.getByRole('heading', { name: '全3問、完了しました！' })).toBeVisible();
+});
+
+test('keeps state when reset is cancelled and clears it after confirmation', async ({ page }) => {
+  await page.goto('./trial/');
+  await page.getByLabel('空欄に入る命令').fill('prin');
+  await page.waitForTimeout(300);
+
+  page.once('dialog', (dialog) => dialog.dismiss());
+  await page.getByRole('button', { name: '最初からやり直す' }).click();
+  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('prin');
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await page.getByRole('button', { name: '最初からやり直す' }).click();
+  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('');
+  await expect(page.getByRole('heading', { name: '無料体験：文字を表示してみよう' })).toBeFocused();
+
+  await page.reload();
+  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('');
+  await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
 });

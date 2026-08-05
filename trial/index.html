@@ -21,7 +21,7 @@
         <header class="p-trial-heading">
           <div>
             <p class="c-section-heading__eyebrow">FREE TRIAL</p>
-            <h1>無料体験：文字を表示してみよう</h1>
+            <h1 tabindex="-1" data-page-title>無料体験：文字を表示してみよう</h1>
             <p>全3問を通して、Javaで文字を表示する基本を学びます。</p>
           </div>
           <p class="p-trial-heading__notice"><span aria-hidden="true">i</span> Javaコードは実行せず、入力内容をブラウザ内で判定する体験版です。</p>
@@ -36,6 +36,7 @@
           <nav aria-label="問題の進捗">
             <ol class="p-trial-progress__list" data-progress-navigation></ol>
           </nav>
+          <button class="p-trial-progress__reset" type="button" data-reset-progress>最初からやり直す</button>
         </section>
 
         <section class="p-trial-workspace" aria-labelledby="question-title">
@@ -55,6 +56,7 @@
                 <h2>コード入力</h2>
                 <p>入力内容は外部へ送信しません。</p>
               </div>
+              <p class="p-code-form__review" hidden data-review-notice>この問題は見直し中です。「再挑戦」を押すと編集できます。</p>
 
               <div class="p-code-form__fragment" data-fragment-field>
                 <label for="fragment-answer">空欄に入る命令</label>
@@ -90,7 +92,31 @@
                 <pre><code data-console-output></code></pre>
               </div>
               <button class="c-button c-button--primary" type="button" hidden data-next-question>次の問題へ</button>
+              <button class="c-button c-button--secondary" type="button" hidden data-retry-question>再挑戦</button>
             </section>
+          </div>
+        </section>
+
+        <section class="p-trial-completion" tabindex="-1" hidden data-completion>
+          <p class="p-trial-completion__eyebrow">LESSON COMPLETE</p>
+          <h2>全3問、完了しました！</h2>
+          <p class="p-trial-completion__score"><strong>3 / 3</strong> 問正解</p>
+          <div class="p-trial-completion__learned">
+            <h3>今回学んだこと</h3>
+            <ul>
+              <li><code>System.out.println</code>で文字を表示できる</li>
+              <li>文字列はダブルクォーテーションで囲む</li>
+              <li>文末にセミコロンを付ける</li>
+            </ul>
+          </div>
+          <div class="p-trial-completion__next">
+            <p>次の学習</p>
+            <h3>第2章：変数とデータ型</h3>
+            <button class="c-button c-button--primary" type="button" disabled>準備中</button>
+          </div>
+          <div class="p-trial-completion__actions">
+            <button class="c-button c-button--secondary" type="button" data-review-all>3問を見直す</button>
+            <a href="../">LPへ戻る</a>
           </div>
         </section>
       </div>
