@@ -2,6 +2,8 @@ import { QUESTIONS, getQuestionById } from './questions.js';
 
 const elements = {
   answerForm: document.querySelector('[data-answer-form]'),
+  answerShortcut: document.querySelector('[data-answer-shortcut]'),
+  announcement: document.querySelector('[data-status-announcement]'),
   codePrefix: document.querySelector('[data-code-prefix]'),
   codeSuffix: document.querySelector('[data-code-suffix]'),
   completion: document.querySelector('[data-completion]'),
@@ -20,11 +22,11 @@ const elements = {
   lineInput: document.querySelector('[data-line-input]'),
   navigation: document.querySelector('[data-progress-navigation]'),
   nextQuestion: document.querySelector('[data-next-question]'),
-  pageTitle: document.querySelector('[data-page-title]'),
   progressbar: document.querySelector('[data-progressbar]'),
   prompt: document.querySelector('[data-question-prompt]'),
   resetProgress: document.querySelector('[data-reset-progress]'),
   resultMessage: document.querySelector('[data-result-message]'),
+  resultIcon: document.querySelector('[data-result-icon]'),
   resultTitle: document.querySelector('[data-result-title]'),
   retryQuestion: document.querySelector('[data-retry-question]'),
   reviewAll: document.querySelector('[data-review-all]'),
@@ -91,11 +93,41 @@ const setEditorReadOnly = (isReadOnly) => {
   elements.lineInput.readOnly = isReadOnly;
   elements.answerForm.classList.toggle('p-code-form--readonly', isReadOnly);
   elements.reviewNotice.hidden = !isReadOnly;
+  elements.answerShortcut.hidden = isReadOnly;
   elements.submit.hidden = isReadOnly;
+
+  const descriptionId = isReadOnly ? 'review-notice' : 'answer-shortcut';
+  elements.fragmentInput.setAttribute('aria-describedby', descriptionId);
+  elements.lineInput.setAttribute('aria-describedby', descriptionId);
 };
 
-export const getActiveAnswer = (question) =>
-  question.inputType === 'fragment' ? elements.fragmentInput.value : elements.lineInput.value;
+const getActiveInput = (question) =>
+  question.inputType === 'fragment' ? elements.fragmentInput : elements.lineInput;
+
+const setResultType = (type) => {
+  elements.resultIcon.textContent = type === 'correct' ? '✓' : type === 'incorrect' ? '!' : 'i';
+};
+
+const announce = (message) => {
+  elements.announcement.textContent = '';
+  window.requestAnimationFrame(() => {
+    elements.announcement.textContent = message;
+  });
+};
+
+export const getActiveAnswer = (question) => getActiveInput(question).value;
+
+export const clearAnswerError = (question) => {
+  const input = getActiveInput(question);
+  input.removeAttribute('aria-invalid');
+  input.setAttribute('aria-describedby', 'answer-shortcut');
+};
+
+export const prepareAnswerEdit = (question) => {
+  clearAnswerError(question);
+  resetFeedback();
+  elements.announcement.textContent = '';
+};
 
 export const renderQuestion = (state, { mode = 'learning', onSelect = () => {} } = {}) => {
   const question = getQuestionById(state.currentQuestionId) ?? QUESTIONS[0];
@@ -116,21 +148,21 @@ export const renderQuestion = (state, { mode = 'learning', onSelect = () => {} }
   elements.fragmentInput.value = state.answers[question.id] ?? '';
   elements.lineInput.value = state.answers[question.id] ?? '';
   resetFeedback();
+  clearAnswerError(question);
   setEditorReadOnly(isReview);
   renderProgress(state, onSelect);
 
   if (isReview) {
     renderReviewFeedback(question);
-  } else {
-    (isFragment ? elements.fragmentInput : elements.lineInput).focus();
   }
 };
 
-export const renderIncorrectFeedback = (hint) => {
+export const renderIncorrectFeedback = (question, hint) => {
   elements.feedback.hidden = false;
   elements.feedback.classList.remove('p-trial-feedback--correct');
   elements.feedback.classList.add('p-trial-feedback--incorrect');
   elements.resultTitle.textContent = 'もう一度確認してみよう';
+  setResultType('incorrect');
   elements.resultMessage.textContent = '入力した内容に、見直せるところがあります。';
   elements.hintText.textContent = hint.message;
   elements.hint.hidden = false;
@@ -138,7 +170,10 @@ export const renderIncorrectFeedback = (hint) => {
   elements.console.hidden = true;
   elements.nextQuestion.hidden = true;
   elements.retryQuestion.hidden = true;
-  elements.feedback.focus();
+  const input = getActiveInput(question);
+  input.setAttribute('aria-invalid', 'true');
+  input.setAttribute('aria-describedby', 'answer-shortcut hint-text');
+  announce(`不正解です。もう一度確認してみよう。ヒント：${hint.message}`);
 };
 
 const showCorrectDetails = (question) => {
@@ -155,20 +190,24 @@ const showCorrectDetails = (question) => {
 export const renderCorrectFeedback = (question, actionLabel) => {
   showCorrectDetails(question);
   elements.resultTitle.textContent = '正解！';
+  setResultType('correct');
   elements.resultMessage.textContent = 'コードを正しく完成できました。';
   elements.nextQuestion.textContent = actionLabel;
   elements.nextQuestion.hidden = false;
   elements.retryQuestion.hidden = true;
-  elements.feedback.focus();
+  clearAnswerError(question);
+  announce(`正解です。${question.explanation} 想定出力は「${question.expectedOutput}」です。`);
 };
 
 export const renderReviewFeedback = (question) => {
   showCorrectDetails(question);
   elements.resultTitle.textContent = '完了した問題';
+  setResultType('information');
   elements.resultMessage.textContent = '保存した回答と解説を見直せます。';
   elements.nextQuestion.textContent = '学習に戻る';
   elements.nextQuestion.hidden = false;
   elements.retryQuestion.hidden = false;
+  announce(`完了した問題${question.step}を見直しています。保存した回答、解説、想定出力を表示しました。`);
 };
 
 export const renderCompletion = (state, onSelect) => {
@@ -176,10 +215,8 @@ export const renderCompletion = (state, onSelect) => {
   elements.completion.hidden = false;
   elements.count.textContent = `問題 ${QUESTIONS.length} / ${QUESTIONS.length}`;
   renderProgress(state, onSelect, true);
-  elements.completion.focus();
+  announce('全3問、完了しました。3問中3問正解です。');
 };
-
-export const focusPageTitle = () => elements.pageTitle.focus();
 
 export const bindTrialEvents = (handlers) => {
   elements.answerForm.addEventListener('input', (event) => handlers.onAnswerChange(event.target.value));

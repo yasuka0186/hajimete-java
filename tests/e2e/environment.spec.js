@@ -12,6 +12,15 @@ const completeTrial = async (page) => {
   await page.getByRole('button', { name: '結果を見る' }).click();
 };
 
+const expectNoHorizontalOverflow = async (page) => {
+  const dimensions = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
+};
+
 test('serves both entry pages', async ({ page }) => {
   await page.goto('./');
   await expect(page.getByRole('heading', { name: /はじめてでも迷わない/ })).toBeVisible();
@@ -125,7 +134,16 @@ test('shows a specific hint for an incorrect trial answer', async ({ page }) => 
   await expect(feedback).toBeFocused();
   await expect(feedback.getByRole('heading', { name: 'もう一度確認してみよう' })).toBeVisible();
   await expect(feedback.getByText(/println.*小文字/)).toBeVisible();
-  await expect(page.getByLabel('空欄に入る命令')).toHaveValue('print');
+  const answer = page.getByLabel('空欄に入る命令');
+  await expect(answer).toHaveValue('print');
+  await expect(answer).toHaveAttribute('aria-invalid', 'true');
+  await expect(answer).toHaveAttribute('aria-describedby', /hint-text/);
+  await expect(page.getByRole('status')).toContainText(/不正解です.*ヒント/);
+
+  await answer.fill('println');
+  await expect(answer).not.toHaveAttribute('aria-invalid');
+  await expect(answer).toHaveAttribute('aria-describedby', 'answer-shortcut');
+  await expect(feedback).toBeHidden();
 });
 
 test('shows feedback without auto-advancing and advances only with the next button', async ({ page }) => {
@@ -138,6 +156,8 @@ test('shows feedback without auto-advancing and advances only with the next butt
   await expect(feedback.getByRole('heading', { name: '正解！' })).toBeVisible();
   await expect(feedback.getByText(/printlnは/)).toBeVisible();
   await expect(feedback.getByText('Hello, Java!', { exact: true })).toBeVisible();
+  await expect(feedback.locator('[data-result-icon]')).toHaveText('✓');
+  await expect(page.getByRole('status')).toContainText(/正解です.*想定出力/);
   await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
 
   await page.getByRole('button', { name: '次の問題へ' }).click();
@@ -238,4 +258,119 @@ test('keeps state when reset is cancelled and clears it after confirmation', asy
   await page.reload();
   await expect(page.getByLabel('空欄に入る命令')).toHaveValue('');
   await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
+});
+
+test('completes the main trial flow using only the keyboard', async ({ page }) => {
+  await page.goto('./trial/');
+
+  await page.keyboard.type('println');
+  await page.keyboard.press('Control+Enter');
+  await expect(page.locator('[data-feedback]')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: '次の問題へ' })).toBeFocused();
+  await page.keyboard.press('Enter');
+
+  await page.keyboard.type('System.out.println("Hello, Java!");');
+  await page.keyboard.press('Control+Enter');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+
+  await page.keyboard.type('System.out.println("Javaをはじめよう");');
+  await page.keyboard.press('Control+Enter');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: '結果を見る' })).toBeFocused();
+  await page.keyboard.press('Enter');
+
+  await expect(page.getByRole('heading', { name: '全3問、完了しました！' })).toBeVisible();
+  await expect(page.locator('[data-completion]')).toBeFocused();
+});
+
+test('recovers safely from broken and unknown saved data', async ({ page }) => {
+  const pageErrors = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.goto('./trial/');
+
+  await page.evaluate(() => window.localStorage.setItem('hajimete-java:trial:v1', '{broken'));
+  await page.reload();
+  await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
+
+  await page.evaluate(() =>
+    window.localStorage.setItem(
+      'hajimete-java:trial:v1',
+      JSON.stringify({
+        currentQuestionId: 'unknown',
+        completedQuestionIds: ['unknown'],
+        answers: { unknown: 'value' },
+      }),
+    ),
+  );
+  await page.reload();
+  await expect(page.getByLabel('空欄に入る命令')).toBeEditable();
+  await expect(page.getByText('問題 1 / 3', { exact: true })).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
+
+test('continues the trial when browser storage is unavailable', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.Storage.prototype.getItem = () => {
+      throw new Error('storage unavailable');
+    };
+    window.Storage.prototype.setItem = () => {
+      throw new Error('storage unavailable');
+    };
+  });
+  await page.goto('./trial/');
+
+  await page.getByLabel('空欄に入る命令').fill('println');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await expect(page.getByRole('heading', { name: '正解！' })).toBeVisible();
+});
+
+for (const width of [390, 1024]) {
+  test(`keeps every trial state usable without horizontal overflow at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('./trial/');
+    await expectNoHorizontalOverflow(page);
+
+    await page.getByLabel('空欄に入る命令').fill('print');
+    await page.getByRole('button', { name: '答えを確認する' }).click();
+    await expectNoHorizontalOverflow(page);
+
+    await page.getByLabel('空欄に入る命令').fill('println');
+    await page.getByRole('button', { name: '答えを確認する' }).click();
+    await expectNoHorizontalOverflow(page);
+    await page.getByRole('button', { name: '次の問題へ' }).click();
+    await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Hello, Java!");');
+    await page.getByRole('button', { name: '答えを確認する' }).click();
+    await page.getByRole('button', { name: '次の問題へ' }).click();
+    await page.getByLabel('Javaコードを1行で入力').fill('System.out.println("Javaをはじめよう");');
+    await page.getByRole('button', { name: '答えを確認する' }).click();
+    await page.getByRole('button', { name: '結果を見る' }).click();
+    await expectNoHorizontalOverflow(page);
+
+    await page.getByRole('button', { name: '3問を見直す' }).click();
+    await expect(page.getByLabel('空欄に入る命令')).toHaveAttribute('readonly', '');
+    await expectNoHorizontalOverflow(page);
+    await page.getByRole('button', { name: '再挑戦' }).click();
+    await expectNoHorizontalOverflow(page);
+  });
+}
+
+test('keeps primary controls usable at a desktop-equivalent 200% zoom width', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.goto('./trial/');
+
+  await expectNoHorizontalOverflow(page);
+  for (const control of [
+    page.getByRole('button', { name: '最初からやり直す' }),
+    page.getByRole('button', { name: '答えを確認する' }),
+  ]) {
+    const box = await control.boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+  }
+
+  await page.getByLabel('空欄に入る命令').fill('print');
+  await page.getByRole('button', { name: '答えを確認する' }).click();
+  await expect(page.getByRole('heading', { name: 'もう一度確認してみよう' })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
 });

@@ -171,6 +171,11 @@
   cursor: pointer;
 }
 
+.p-trial-progress__button:not(:disabled):hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
 .p-trial-progress__reset {
   min-block-size: var(--tap-size);
   padding: 0;
@@ -323,7 +328,13 @@
   border-color: #94a3b8;
   color: #e2e8f0;
   background: #334155;
-  cursor: not-allowed;
+  cursor: default;
+}
+
+.p-code-form [aria-invalid='true'] {
+  border-color: #fca5a5;
+  outline: 2px solid #fca5a5;
+  outline-offset: 2px;
 }
 
 .p-code-form__code-line input {
@@ -379,6 +390,32 @@
 .p-trial-feedback h2,
 .p-trial-feedback h3 {
   font-size: var(--font-size-lg);
+}
+
+.p-trial-feedback h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.p-trial-feedback__icon {
+  display: inline-grid;
+  flex: none;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  place-items: center;
+  border: 2px solid currentcolor;
+  border-radius: 50%;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.p-trial-feedback--correct .p-trial-feedback__icon {
+  color: var(--color-success);
+}
+
+.p-trial-feedback--incorrect .p-trial-feedback__icon {
+  color: var(--color-error);
 }
 
 .p-trial-feedback .c-button[hidden] {
@@ -449,6 +486,29 @@
   justify-content: center;
   gap: var(--space-3);
   margin-block-start: var(--space-5);
+}
+
+.p-trial-completion__actions a {
+  display: inline-flex;
+  min-block-size: var(--tap-size);
+  align-items: center;
+  padding-inline: var(--space-2);
+}
+
+@media (width <= 40rem) {
+  .p-trial-heading,
+  .p-trial-progress__summary {
+    align-items: stretch;
+  }
+
+  .p-trial-progress__summary {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .p-trial-completion {
+    padding: var(--space-4);
+  }
 }
 
 @media (width >= 48rem) {

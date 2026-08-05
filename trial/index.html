@@ -27,6 +27,8 @@
           <p class="p-trial-heading__notice"><span aria-hidden="true">i</span> Javaコードは実行せず、入力内容をブラウザ内で判定する体験版です。</p>
         </header>
 
+        <p class="u-visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-status-announcement></p>
+
         <section class="p-trial-progress" aria-labelledby="progress-title">
           <div class="p-trial-progress__summary">
             <h2 id="progress-title">レッスンの進み具合</h2>
@@ -56,32 +58,32 @@
                 <h2>コード入力</h2>
                 <p>入力内容は外部へ送信しません。</p>
               </div>
-              <p class="p-code-form__review" hidden data-review-notice>この問題は見直し中です。「再挑戦」を押すと編集できます。</p>
+              <p class="p-code-form__review" id="review-notice" hidden data-review-notice>この問題は見直し中です。「再挑戦」を押すと編集できます。</p>
 
               <div class="p-code-form__fragment" data-fragment-field>
                 <label for="fragment-answer">空欄に入る命令</label>
                 <div class="p-code-form__code-line">
                   <code data-code-prefix></code>
-                  <input id="fragment-answer" name="answer-fragment" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" data-fragment-input>
+                  <input id="fragment-answer" name="answer-fragment" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="answer-shortcut" data-fragment-input>
                   <code data-code-suffix></code>
                 </div>
               </div>
 
               <div class="p-code-form__line" hidden data-line-field>
                 <label for="line-answer">Javaコードを1行で入力</label>
-                <textarea id="line-answer" name="answer-line" rows="4" autocomplete="off" autocapitalize="off" spellcheck="false" data-line-input></textarea>
+                <textarea id="line-answer" name="answer-line" rows="4" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="answer-shortcut" data-line-input></textarea>
               </div>
 
-              <p class="p-code-form__shortcut">Ctrl／Command＋Enterでも判定できます。</p>
+              <p class="p-code-form__shortcut" id="answer-shortcut" data-answer-shortcut>Ctrl／Command＋Enterでも判定できます。</p>
               <button class="c-button c-button--primary p-code-form__submit" type="submit">答えを確認する</button>
             </form>
 
-            <section class="p-trial-feedback" aria-labelledby="result-title" aria-live="polite" tabindex="-1" hidden data-feedback>
-              <h2 id="result-title" data-result-title>判定結果</h2>
+            <section class="p-trial-feedback" aria-labelledby="result-title" tabindex="-1" hidden data-feedback>
+              <h2 id="result-title"><span class="p-trial-feedback__icon" aria-hidden="true" data-result-icon></span><span data-result-title>判定結果</span></h2>
               <p data-result-message></p>
               <aside class="p-trial-hint" aria-labelledby="hint-title" hidden data-hint>
                 <h3 id="hint-title">ヒント</h3>
-                <p data-hint-text></p>
+                <p id="hint-text" data-hint-text></p>
               </aside>
               <div hidden data-explanation>
                 <h3>解説</h3>

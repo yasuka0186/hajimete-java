@@ -2,6 +2,12 @@ import '../scss/style.scss';
 import { validateAnswer } from './modules/answer-validator.js';
 import { resolveHint } from './modules/hint-resolver.js';
 import {
+  focusActiveAnswer,
+  focusCompletion,
+  focusPageTitle,
+  focusResult,
+} from './modules/focus-manager.js';
+import {
   createDebouncedProgressSaver,
   getFirstIncompleteQuestionId,
   isTrialComplete,
@@ -11,8 +17,8 @@ import {
 import { QUESTIONS, getQuestionById } from './modules/questions.js';
 import {
   bindTrialEvents,
-  focusPageTitle,
   getActiveAnswer,
+  prepareAnswerEdit,
   renderCompletion,
   renderCorrectFeedback,
   renderIncorrectFeedback,
@@ -34,6 +40,11 @@ const openQuestion = (questionId, nextMode) => {
   mode = nextMode;
   progressSaver.flush(state);
   renderQuestion(state, { mode, onSelect: handleReview });
+  if (mode === 'review') {
+    focusResult();
+  } else {
+    focusActiveAnswer(getCurrentQuestion().inputType);
+  }
 };
 
 function handleReview(questionId) {
@@ -57,6 +68,7 @@ const returnToLearning = () => {
     mode = 'completion';
     progressSaver.flush(state);
     renderCompletion(state, handleReview);
+    focusCompletion();
     return;
   }
 
@@ -75,7 +87,8 @@ const handleSubmit = () => {
 
   if (!result.isCorrect) {
     progressSaver.flush(state);
-    renderIncorrectFeedback(resolveHint(result.normalizedAnswer, question));
+    renderIncorrectFeedback(question, resolveHint(result.normalizedAnswer, question));
+    focusResult();
     return;
   }
 
@@ -88,10 +101,12 @@ const handleSubmit = () => {
 
   if (mode === 'retry') {
     renderCorrectFeedback(question, '学習に戻る');
+    focusResult();
     return;
   }
 
   renderCorrectFeedback(question, question.step < QUESTIONS.length ? '次の問題へ' : '結果を見る');
+  focusResult();
 };
 
 const handleNext = () => {
@@ -111,6 +126,7 @@ const handleNext = () => {
     mode = 'completion';
     progressSaver.flush(state);
     renderCompletion(state, handleReview);
+    focusCompletion();
     return;
   }
 
@@ -122,6 +138,7 @@ const handleRetry = () => {
   mode = 'retry';
   progressSaver.flush(state);
   renderQuestion(state, { mode, onSelect: handleReview });
+  focusActiveAnswer(getCurrentQuestion().inputType);
 };
 
 const handleReset = () => {
@@ -144,6 +161,7 @@ bindTrialEvents({
     }
 
     state.answers[state.currentQuestionId] = answer;
+    prepareAnswerEdit(getCurrentQuestion());
     progressSaver.schedule(state);
   },
   onNext: handleNext,
@@ -155,6 +173,8 @@ bindTrialEvents({
 
 if (mode === 'completion') {
   renderCompletion(state, handleReview);
+  focusCompletion();
 } else {
   renderQuestion(state, { mode, onSelect: handleReview });
+  focusActiveAnswer(getCurrentQuestion().inputType);
 }
