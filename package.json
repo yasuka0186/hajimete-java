@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "lint:styles": "stylelint \"src/scss/**/*.scss\"",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^10.8.0",
     "html-validate": "^10.17.0",
     "sass": "^1.102.0",

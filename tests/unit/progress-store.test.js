@@ -68,6 +68,46 @@ describe('progress store', () => {
     });
   });
 
+  it('removes duplicate completions and resumes the first incomplete problem', () => {
+    const storage = createStorage(
+      JSON.stringify({
+        currentQuestionId: 'question-1',
+        completedQuestionIds: ['question-1', 'question-1'],
+        answers: {},
+      }),
+    );
+
+    expect(loadProgress(storage)).toEqual({
+      currentQuestionId: 'question-2',
+      completedQuestionIds: ['question-1'],
+      answers: { 'question-1': '', 'question-2': '', 'question-3': '' },
+    });
+  });
+
+  it('keeps a valid saved incomplete problem as the resume position', () => {
+    const storage = createStorage(
+      JSON.stringify({
+        currentQuestionId: 'question-3',
+        completedQuestionIds: ['question-1'],
+        answers: {},
+      }),
+    );
+
+    expect(loadProgress(storage).currentQuestionId).toBe('question-3');
+  });
+
+  it('uses the last problem when completed data has an unknown current id', () => {
+    const storage = createStorage(
+      JSON.stringify({
+        currentQuestionId: 'unknown',
+        completedQuestionIds: ['question-1', 'question-2', 'question-3'],
+        answers: {},
+      }),
+    );
+
+    expect(loadProgress(storage).currentQuestionId).toBe('question-3');
+  });
+
   it('calculates the first incomplete problem and full completion', () => {
     const progress = createInitialProgress();
     expect(getFirstIncompleteQuestionId(progress)).toBe('question-1');
@@ -82,6 +122,24 @@ describe('progress store', () => {
     const storage = createStorage('{}');
     expect(resetProgress(storage)).toEqual(createInitialProgress());
     expect(storage.removeItem).toHaveBeenCalledWith(STORAGE_KEY);
+  });
+
+  it('keeps operating when storage APIs throw errors', () => {
+    const unavailableStorage = {
+      getItem: vi.fn(() => {
+        throw new Error('unavailable');
+      }),
+      removeItem: vi.fn(() => {
+        throw new Error('unavailable');
+      }),
+      setItem: vi.fn(() => {
+        throw new Error('unavailable');
+      }),
+    };
+
+    expect(loadProgress(unavailableStorage)).toEqual(createInitialProgress());
+    expect(() => saveProgress(createInitialProgress(), unavailableStorage)).not.toThrow();
+    expect(resetProgress(unavailableStorage)).toEqual(createInitialProgress());
   });
 
   it('debounces input saves and can cancel a pending save', () => {
@@ -101,9 +159,12 @@ describe('progress store', () => {
     vi.advanceTimersByTime(1);
     expect(storage.setItem).toHaveBeenCalledTimes(1);
 
+    saver.flush(progress);
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+
     saver.schedule(progress);
     saver.cancel();
     vi.runAllTimers();
-    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
   });
 });

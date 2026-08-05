@@ -9,7 +9,7 @@
 - 技術: HTML5、SCSS、JavaScript（ES Modules）、Vite、Vitest、Playwright、ESLint、Stylelint、HTML Validate
 - GitHub Pages: Viteの`base`を`./`とし、プロジェクトサイト配下でもアセット参照が解決される相対パス方針とする
 
-Day 2の情報設計は[`docs/day-2-information-architecture.md`](docs/day-2-information-architecture.md)、Day 3のデザイントークンと共通部品方針は[`docs/day-3-design-foundation.md`](docs/day-3-design-foundation.md)にまとめています。Day 6までにLP全体を完成し、Day 7で無料体験の画面基盤、Day 8で回答判定とフィードバック、Day 9で保存・見直し・完了フロー、Day 10でフォーカス・読み上げ・エラー・レスポンシブ品質を調整しました。自動テストの仕上げ以降は制作スケジュールに従って追加します。
+Day 2の情報設計は[`docs/day-2-information-architecture.md`](docs/day-2-information-architecture.md)、Day 3のデザイントークンと共通部品方針は[`docs/day-3-design-foundation.md`](docs/day-3-design-foundation.md)にまとめています。Day 6までにLP全体を完成し、Day 7〜10で無料体験の学習フローと品質調整、Day 11で必須単体テスト・E2E・カバレッジ判定を整備しました。テストの要件対応は[`docs/day-11-automated-test-matrix.md`](docs/day-11-automated-test-matrix.md)にまとめています。
 
 ## セットアップ
 
@@ -24,11 +24,20 @@ npx playwright install chromium
 npm run dev
 npm run build
 npm run test:unit
+npm run test:coverage
 npm run test:e2e
 npm run lint
 npm run lint:styles
 npm run validate:html
 ```
+
+## 自動テスト
+
+- Vitest: 回答判定、誤答ヒント、保存・復元・リセット、破損データ、境界値
+- Coverage: 判定・ヒント・保存の主要3モジュールでステートメント80％以上を必須化
+- Playwright: 仕様書の必須13シナリオに加え、レスポンシブ、キーボード、例外復旧を確認
+
+Day 11完了時点の結果は、Vitestとカバレッジ、Chromium版Playwrightの全件成功を確認する。実行件数とカバレッジ数値は実行環境で変化しうるため、上記コマンドの出力を正とする。
 
 ## デモについて
 
