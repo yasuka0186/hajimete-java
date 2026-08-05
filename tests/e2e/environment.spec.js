@@ -29,7 +29,7 @@ test('serves both entry pages', async ({ page }) => {
   await expect(page).toHaveURL(/\/trial\/$/);
   await expect(page.getByRole('heading', { name: '無料体験：文字を表示してみよう' })).toBeVisible();
 
-  await page.getByRole('banner').getByRole('link', { name: 'LPへ戻る' }).click();
+  await page.getByRole('banner').getByRole('link', { name: 'トップページへ戻る' }).click();
   await expect(page).toHaveURL(/\/$/);
 });
 
